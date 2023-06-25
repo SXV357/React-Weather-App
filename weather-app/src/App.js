@@ -1,20 +1,12 @@
-import React, {useState, useEffect} from 'react'
-import API_KEY from './apikey'
+import React, {useState} from 'react'
 
 export default function App(){
-
-const API_Info = {
-  key: {API_KEY},
-  link: "http://api.weatherapi.com/v1"
-}
-
   const [currentWeather, setCurrentWeather] = useState({})
   const [input, setInput] = useState(" ")
 
-
   function getData(event){
     if (event.key === "Enter") {
-    fetch(`${API_Info.link}/current.json?key=${API_Info.key}&q=${input}`)
+    fetch(`http://api.weatherapi.com/v1/current.json?key=${process.env.REACT_APP_WEATHER_API_KEY}&q=${input}`)
       .then(res => res.json())
       .then(data => {setCurrentWeather(data); setInput(" ")})
   }
@@ -43,7 +35,6 @@ const API_Info = {
     return `${day}/${month}/${year}`
   }
 
-
   return(
     <main>
       <div className = "input-container">
@@ -55,7 +46,7 @@ const API_Info = {
               setInput(value)
             }} 
             value = {input} 
-            onKeyPress = {getData}/>
+            onKeyPress={getData} />
             </div>
         {currentWeather.current ? <div className = "weather-container">
           <p>{currentWeather.location.name}, {currentWeather.location.region}, {currentWeather.location.country}</p>
